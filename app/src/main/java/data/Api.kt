@@ -11,7 +11,7 @@ import vlados.dudos.pixelseller.ShopResponce
 
 interface Api {
 
-    @GET("/goods")
+    @GET("/goods-category-dictionary")
     fun category(): Observable<List<CategoryResponse>>
 
 

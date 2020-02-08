@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.shop_view.view.*
 
 class ShopFragment : Fragment() {
 
-//    val categoryList = mutableListOf<>()
+    val categoryList = mutableListOf<Int>()
     val phones = App.dm.api.phones()
     val category = App.dm.api.category()
 
@@ -36,6 +36,12 @@ class ShopFragment : Fragment() {
         val asd = inflater.inflate(R.layout.shop_fragment, container, false)
         val rv2 = asd.findViewById(R.id.rvS) as RecyclerView
         val gridLayoutManager = GridLayoutManager(activity, 2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position in categoryList) gridLayoutManager.getSpanCount()
+                else 1
+            }
+        }
 
         rv2.layoutManager = gridLayoutManager
 
@@ -62,6 +68,10 @@ class ShopFragment : Fragment() {
                     }
                 }
 
+                shops.forEachIndexed { index, itemView ->
+                    if (itemView is CategoryResponse)
+                        categoryList.add(index)
+                }
 
                 rv2.adapter = ShopAdapterF(shops) { item ->
                     toShopProfile(item)
